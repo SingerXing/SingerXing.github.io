@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Singer Xing</title>
+<meta name="description" content="Singer Xing, mathematics and data science at UW–Madison. Machine learning for complex systems, model optimization and decision-making under uncertainty.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,750&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a one-page portfolio. Hero with a live research visual, a proof strip, large
+   project cards with their own visuals, an experience timeline, skills, contact. */
+:root{
+  --bg:#F3F4F7;        /* cool paper */
+  --surface:#FFFFFF;   /* cards */
+  --ink:#0F1726;       /* text */
+  --ink-2:#536074;     /* secondary */
+  --line:#DCE0E8;      /* hairlines */
+  --accent:#2F5BEA;    /* cobalt */
+  --accent-ink:#FFFFFF;
+  --warm:#E0563B;      /* coral, for the "positive" side of fields and Bayesian series */
+  --soft:#E8ECF7;      /* tinted fills */
+  --s-grid:#8A94A6; --s-rand:#2F5BEA; --s-bayes:#E0563B;
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1220; --surface:#151C2D; --ink:#E8ECF4; --ink-2:#97A2B6; --line:#263047; --accent:#7E9BFF; --accent-ink:#0D1220;
+  --warm:#FF8A6E; --soft:#1C2540; --s-grid:#8E99AD; --s-rand:#7E9BFF; --s-bayes:#FF8A6E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1220; --surface:#151C2D; --ink:#E8ECF4; --ink-2:#97A2B6; --line:#263047; --accent:#7E9BFF; --accent-ink:#0D1220;
+  --warm:#FF8A6E; --soft:#1C2540; --s-grid:#8E99AD; --s-rand:#7E9BFF; --s-bayes:#FF8A6E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1140px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:700px){.wrap{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.08;text-wrap:balance;letter-spacing:-.015em}
+p{margin:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.num{font-variant-numeric:tabular-nums}
+
+/* nav */
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.brand{font-family:var(--f-display);font-weight:750;font-size:1.15rem;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+.mark{width:30px;height:30px;border-radius:8px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-size:.85rem;font-weight:750}
+.links{display:flex;gap:24px;align-items:center}
+.links a{color:var(--ink-2);text-decoration:none;font-size:.92rem;font-weight:500}
+.links a:hover{color:var(--ink)}
+@media (max-width:760px){.links a.hide-sm{display:none}}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 .92rem/1 var(--f-body);padding:12px 18px;border-radius:999px;text-decoration:none;border:1px solid transparent;cursor:pointer;white-space:nowrap}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{border-color:var(--line);color:var(--ink);background:var(--surface)}
+.btn.ghost:hover{border-color:var(--ink-2)}
+.btn.sm{padding:9px 14px;font-size:.85rem}
+
+/* hero */
+.hero{padding-block:64px 40px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center}
+@media (max-width:900px){.hero-grid{grid-template-columns:minmax(0,1fr);gap:36px}.hero{padding-block:40px 32px}}
+.avail{display:inline-flex;align-items:center;gap:9px;font-size:.88rem;font-weight:500;padding:7px 14px 7px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.avail i{width:8px;height:8px;border-radius:50%;background:#2DB37A;box-shadow:0 0 0 4px color-mix(in srgb,#2DB37A 22%,transparent)}
+.hero h1{font-size:clamp(2.6rem,6.2vw,4.6rem);font-weight:750;margin-top:22px}
+.hero h1 span{color:var(--accent)}
+.hero .lede{font-size:clamp(1.05rem,1.6vw,1.2rem);color:var(--ink-2);margin-top:20px;max-width:34rem}
+.hero .lede b{color:var(--ink);font-weight:600}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.social{display:flex;gap:18px;margin-top:22px;font-size:.9rem}
+.social a{color:var(--ink-2);text-decoration:none;font-weight:500}
+.social a:hover{color:var(--accent)}
+
+.sim{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 24px 48px -28px color-mix(in srgb,var(--ink) 35%,transparent)}
+.sim-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.sim-top .live{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:.74rem;color:var(--ink-2)}
+.sim-top .live i{width:7px;height:7px;border-radius:50%;background:var(--warm)}
+#field{display:block;width:100%;height:clamp(170px,22vw,240px)}
+.sim-ctl{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}
+.ctl{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--ink-2)}
+.ctl output{font-family:var(--f-mono);font-size:.78rem;color:var(--ink);min-width:2.4em}
+input[type=range]{accent-color:var(--accent);width:96px}
+.chip{font:500 .8rem/1 var(--f-body);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 12px;cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sim-cap{padding:0 16px 14px;font-size:.8rem;color:var(--ink-2);line-height:1.5}
+
+/* proof strip */
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.strip div{padding:20px 22px}
+.strip div + div{border-left:1px solid var(--line)}
+.strip b{display:block;font-family:var(--f-display);font-size:2rem;font-weight:750;line-height:1;font-variant-numeric:tabular-nums}
+.strip span{display:block;margin-top:8px;font-size:.84rem;color:var(--ink-2);line-height:1.4}
+@media (max-width:720px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}.strip div:nth-child(3){border-left:none}.strip div:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* sections */
+section{padding-block:88px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:32px}
+.sec-head h2{font-size:clamp(2rem,4vw,2.9rem);font-weight:750;margin-top:8px}
+.sec-head p{color:var(--ink-2);max-width:30rem}
+
+/* project cards */
+.projects{display:grid;gap:22px}
+.proj{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.proj.flip .media{order:2}
+@media (max-width:900px){.proj{grid-template-columns:minmax(0,1fr)}.proj.flip .media{order:0}}
+.media{background:var(--soft);padding:22px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.media img{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
+.body{padding:30px 32px;display:flex;flex-direction:column;gap:14px;min-width:0}
+@media (max-width:560px){.body{padding:24px 20px}.media{padding:16px}}
+.meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.org{font-weight:600;font-size:.9rem}
+.when{font-family:var(--f-mono);font-size:.76rem;color:var(--ink-2)}
+.proj h3{font-size:clamp(1.5rem,2.6vw,1.95rem);font-weight:650}
+.proj .sum{color:var(--ink-2)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font-family:var(--f-mono);font-size:.72rem;padding:4px 9px;border-radius:6px;background:var(--soft);color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kpis div{border-top:2px solid var(--ink);padding-top:8px}
+.kpis b{display:block;font-family:var(--f-display);font-size:1.45rem;font-weight:650;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpis span{display:block;font-size:.76rem;color:var(--ink-2);line-height:1.35;margin-top:4px}
+.plinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+details.more{border-top:1px solid var(--line);padding-top:12px}
+details.more summary{cursor:pointer;font-weight:600;font-size:.9rem;color:var(--accent);list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:" +"}
+details.more[open] summary::after{content:" −"}
+details.more .inner{margin-top:12px;display:grid;gap:10px;font-size:.92rem;color:var(--ink-2)}
+details.more .inner b{color:var(--ink)}
+.note{font-size:.84rem;color:var(--ink-2);padding:10px 12px;border-radius:8px;background:var(--soft)}
+
+.pipe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:12px}
+.pipe div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 6px;text-align:center;font-size:.72rem;color:var(--ink-2);line-height:1.3}
+.pipe div b{display:block;font-family:var(--f-mono);font-size:.78rem;color:var(--ink);font-weight:500;margin-bottom:2px}
+.pipe div.k{border-color:var(--accent)}
+.pipe div.k b{color:var(--accent)}
+.enkf{margin-top:6px;border:1px dashed var(--ink-2);border-radius:8px;padding:6px;text-align:center;font-size:.72rem;color:var(--ink-2)}
+
+/* chart */
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 14px 10px}
+.chart-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.seeds{display:flex;gap:6px;align-items:center;font-size:.78rem;color:var(--ink-2)}
+.keys{display:flex;gap:12px;font-size:.76rem;color:var(--ink-2);flex-wrap:wrap}
+.keys span{display:inline-flex;align-items:center;gap:5px}
+.keys i{width:12px;height:3px;border-radius:2px;display:inline-block}
+#chart{display:block;width:100%;height:auto}
+#chart text{font-family:var(--f-mono);font-size:11px;fill:var(--ink-2)}
+.chart-cap{font-size:.74rem;color:var(--ink-2);margin-top:4px}
+
+/* decision visual */
+.dec{display:grid;gap:10px}
+.bar-row{display:grid;grid-template-columns:7.5rem minmax(0,1fr) 3.4rem;gap:10px;align-items:center;font-size:.82rem}
+.bar-row .track{height:12px;border-radius:6px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.bar-row .fill{height:100%;border-radius:6px}
+.bar-row .v{font-family:var(--f-mono);font-size:.78rem;text-align:right}
+.code{font-family:var(--f-mono);font-size:.78rem;line-height:1.65;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;white-space:pre;color:var(--ink-2)}
+.code b{color:var(--accent);font-weight:500}
+.code em{color:var(--warm);font-style:normal}
+
+/* more work */
+.more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+@media (max-width:900px){.more-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.more-grid{grid-template-columns:minmax(0,1fr)}}
+.mini{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;transition:border-color .15s,transform .15s}
+.mini:hover{border-color:var(--accent);transform:translateY(-2px)}
+.mini h4{margin:0;font-family:var(--f-display);font-size:1.08rem;font-weight:650}
+.mini p{font-size:.86rem;color:var(--ink-2)}
+.mini .when{margin-top:auto;padding-top:6px}
+
+/* experience */
+.timeline{display:grid;gap:0;border-top:1px solid var(--line)}
+.job{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px;padding-block:24px;border-bottom:1px solid var(--line)}
+@media (max-width:700px){.job{grid-template-columns:minmax(0,1fr);gap:6px}}
+.job h3{font-size:1.25rem;font-weight:650}
+.job .role{color:var(--ink-2);margin-top:2px}
+.job ul{margin:10px 0 0;padding-left:1.1em;color:var(--ink-2)}
+.job li + li{margin-top:4px}
+
+/* about + skills */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
+@media (max-width:900px){.about{grid-template-columns:minmax(0,1fr);gap:32px}}
+.about .text p{font-size:1.08rem;color:var(--ink-2)}
+.about .text p + p{margin-top:14px}
+.about .text b{color:var(--ink);font-weight:600}
+.skills{display:grid;gap:16px}
+.skill h4{margin:0 0 8px;font-size:.82rem;font-weight:600;color:var(--ink-2)}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pills span{font-size:.85rem;padding:6px 11px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.edu{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.edu h3{font-size:1.2rem;font-weight:650}
+.edu ul{margin:10px 0 0;padding-left:1.1em;color:var(--ink-2);font-size:.92rem}
+
+/* contact */
+.contact{margin-block:96px 0;background:var(--ink);color:var(--bg);border-radius:20px;padding:56px 40px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:end}
+@media (max-width:800px){.contact{grid-template-columns:minmax(0,1fr);padding:36px 22px}}
+.contact h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:750}
+.contact p{color:color-mix(in srgb,var(--bg) 72%,var(--ink));margin-top:14px;max-width:28rem}
+.contact .clinks{display:grid;gap:10px}
+.contact .clinks a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-radius:12px;border:1px solid color-mix(in srgb,var(--bg) 22%,var(--ink));color:var(--bg);text-decoration:none;font-weight:600}
+.contact .clinks a:hover{border-color:var(--bg)}
+footer{padding-block:28px 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--ink-2);font-size:.86rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.mini{transition:none}}
+</style>
+</head>
+<body>
+
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true">SX</span>Singer Xing</a>
+    <nav class="links" aria-label="Main">
+      <a href="#work">Work</a>
+      <a class="hide-sm" href="#experience">Experience</a>
+      <a class="hide-sm" href="#about">About</a>
+      <a class="btn primary sm" href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <section class="hero" style="padding-top:64px">
+      <div class="hero-grid">
+        <div>
+          <span class="avail"><i aria-hidden="true"></i>Open to data science &amp; ML internships</span>
+          <h1>I build models that <span>forecast complex systems</span>.</h1>
+          <p class="lede">I'm a <b>mathematics and data science</b> student at <b>UW–Madison</b>. I work on machine learning for chaotic dynamics, careful model benchmarking, and Bayesian decision-making, and I report results exactly as I observe them.</p>
+          <div class="cta">
+            <a class="btn primary" href="#work">View my work ↓</a>
+            <a class="btn ghost" href="https://github.com/SingerXing/resume-and-cv-public/blob/main/resume/Singer-Xing-Resume-redacted.pdf">Résumé ↗</a>
+          </div>
+          <div class="social">
+            <a href="https://github.com/SingerXing">GitHub</a>
+            <a href="https://www.linkedin.com/in/singer-xing-08390935b/">LinkedIn</a>
+            <span style="color:var(--ink-2)">Madison, WI</span>
+          </div>
+        </div>
+
+        <figure class="sim" style="margin:0">
+          <div class="sim-top">
+            <span style="font-weight:600;font-size:.88rem">Lorenz–96 · from my research</span>
+            <span class="live"><i aria-hidden="true"></i><span id="readout">t = 0.00</span></span>
+          </div>
+          <canvas id="field" aria-label="Live simulation of the stochastic Lorenz–96 system: 40 sites as rows, time scrolling left to right, color showing each site's value."></canvas>
+          <div class="sim-ctl">
+            <label class="ctl" for="forcing">Forcing <input id="forcing" type="range" min="2" max="16" step="0.5" value="8"><output id="forcingOut" for="forcing">8.0</output></label>
+            <label class="ctl" for="noise">Noise <input id="noise" type="range" min="0" max="2" step="0.1" value="0.5"><output id="noiseOut" for="noise">0.5</output></label>
+            <button class="chip" id="kick" type="button">Perturb</button>
+            <button class="chip" id="play" type="button" aria-pressed="false">Pause</button>
+          </div>
+          <figcaption class="sim-cap">Running live in your browser: 40 coupled variables on a ring. My research team trained a model to compress this system to 8 numbers and forecast it. Try raising the forcing.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <div class="strip" role="list">
+      <div role="listitem"><b>4.0</b><span>GPA in Math &amp; Data Science, UW–Madison</span></div>
+      <div role="listitem"><b>288</b><span>tuning trials benchmarked under equal budgets</span></div>
+      <div role="listitem"><b>197</b><span>automated tests on my decision-planning system</span></div>
+      <div role="listitem"><b>3×</b><span>Dean's List, plus the R. Creighton Buck Prize</span></div>
+    </div>
+
+    <!-- WORK -->
+    <section id="work">
+      <div class="sec-head">
+        <div><span class="eyebrow">Selected work</span><h2>Projects</h2></div>
+        <p>Research, industry and independent work. Each project lists what I built, what I found, and the limits of the evidence.</p>
+      </div>
+
+      <div class="projects">
+        <!-- 1 Research -->
+        <article class="proj">
+          <div class="media">
+            <img src="l96-reconstruction.jpg" width="1188" height="863" loading="lazy" alt="Autoencoder reconstruction (red dashed) closely tracking the true Lorenz–96 trajectory (black) for three variables, two of which are never observed directly.">
+            <div class="pipe" aria-label="Model pipeline">
+              <div><b>ℝ⁴⁰</b>state</div><div><b>Encoder</b>1-D conv</div><div class="k"><b>ℝ¹³</b>8 learned + 5 obs.</div><div><b>LSTM</b>forecast</div><div><b>ℝ⁴⁰</b>decoded</div>
+            </div>
+            <div class="enkf">Next: ensemble Kalman filter correction (proposed)</div>
+          </div>
+          <div class="body">
+            <div class="meta"><span class="org">UW–Madison MXM · Research</span><span class="when">Feb – May 2026</span></div>
+            <h3>Learning statistically accurate dynamics of complex systems</h3>
+            <p class="sum">Built an autoencoder–LSTM model in PyTorch that compresses a chaotic 40-variable system to a 13-dimensional state and forecasts it, then extended it to learn from statistical observations like regional averages and Fourier modes.</p>
+            <div class="kpis">
+              <div><b>40 → 13</b><span>dimensions after compression</span></div>
+              <div><b>2</b><span>systems: Lorenz–96 and FitzHugh–Nagumo</span></div>
+              <div><b>4</b><span>researchers, equal contribution</span></div>
+            </div>
+            <div class="tags"><span>PyTorch</span><span>NumPy</span><span>Autoencoders</span><span>LSTM</span><span>Data assimilation</span></div>
+            <details class="more">
+              <summary>Read the case study</summary>
+              <div class="inner">
+                <p><b>The question.</b> Real observations of complex systems are often summaries, like averages or variances, and many states share the same summary. Can a compact learned model be corrected by those statistics and still recover the full physical state?</p>
+                <p><b>What we built.</b> A convolutional encoder with circular padding (the system lives on a ring) maps 40 sites to 8 learned coordinates. Five observed values are appended. An LSTM with two layers forecasts in that 13-dimensional space, and the decoder maps forecasts back to all 40 sites. The figure shows reconstruction tracking variables that are never observed directly.</p>
+                <p><b>Extensions.</b> We replaced point observations with block averages and Fourier coefficients, tested two ways to couple them to the learned coordinates, and ran forecasts on the FitzHugh–Nagumo spiking model.</p>
+                <p class="note">The ensemble Kalman filter correction is a proposed design, not a finished result. Team: Daniel Youngberg, Tan Bui, Cody McKenna and me.</p>
+              </div>
+            </details>
+            <div class="plinks">
+              <a class="btn ghost sm" href="https://github.com/SingerXing/learning-statistically-accurate-dynamics/blob/main/report/final-report.pdf">Final report ↗</a>
+              <a class="btn ghost sm" href="https://github.com/SingerXing/learning-statistically-accurate-dynamics/blob/main/poster/research-poster.pdf">Poster ↗</a>
+              <a class="btn ghost sm" href="https://github.com/SingerXing/learning-statistically-accurate-dynamics">Repository ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2 Stealth -->
+        <article class="proj flip">
+          <div class="media">
+            <div class="chart-card">
+              <div class="chart-top">
+                <div class="seeds" role="group" aria-label="Search seed">Seed
+                  <button class="chip" type="button" data-seed="42" aria-pressed="true">42</button>
+                  <button class="chip" type="button" data-seed="43" aria-pressed="false">43</button>
+                  <button class="chip" type="button" data-seed="44" aria-pressed="false">44</button>
+                </div>
+                <div class="keys" aria-hidden="true">
+                  <span><i style="background:var(--s-grid)"></i>Grid</span>
+                  <span><i style="background:var(--s-rand)"></i>Random</span>
+                  <span><i style="background:var(--s-bayes)"></i>Bayesian</span>
+                </div>
+              </div>
+              <svg id="chart" viewBox="0 0 520 260" role="img" aria-label="Cross-validated macro F1 for each of 32 trials per strategy. Dots are single trials; lines show the best score found so far."></svg>
+              <p class="chart-cap">Real data: all 96 trials for the selected seed. Lines show the best CV macro F1 found so far.</p>
+            </div>
+          </div>
+          <div class="body">
+            <div class="meta"><span class="org">STEALTH Ventures · Quantitative Analysis</span><span class="when">Aug – Sep 2026</span></div>
+            <h3>Grid vs. random vs. Bayesian tuning, compared fairly</h3>
+            <p class="sum">Built a TF-IDF + LinearSVC text classifier, then rebuilt the tuning benchmark after mentor feedback so all three search strategies got the same compute budget, three random seeds, and a sensitivity analysis.</p>
+            <div class="kpis">
+              <div><b>288</b><span>trials, 1,440 CV model fits</span></div>
+              <div><b>0.774</b><span>best CV macro F1 (Bayesian)</span></div>
+              <div><b>&lt;0.002</b><span>spread between strategies' mean best</span></div>
+            </div>
+            <div class="tags"><span>scikit-learn</span><span>Ray Tune</span><span>HyperOpt</span><span>NLP</span><span>Transformers</span></div>
+            <details class="more">
+              <summary>Read the case study</summary>
+              <div class="inner">
+                <p><b>Feedback loop.</b> My first version ran all three strategies side by side. My mentor noted that wasn't a fair runtime comparison and asked which hyperparameters mattered. The revision fixed concurrency at one CPU and one trial, rotated strategy order, recorded real completion times, and added paired contrasts over the full grid.</p>
+                <p><b>Finding.</b> On this small search space the three strategies finished within 0.002 CV F1 of each other. Bayesian search found the best single run but varied most across seeds. Against the untuned baseline (test F1 0.7364), the CV-selected model scored 0.7428.</p>
+                <p><b>Also for STEALTH.</b> A logistic regression on breast-cancer data, where nested cross-validation showed tuning gave no real advantage, which I reported alongside the higher held-out accuracy. And a transformer fine-tuned on startup and investment text.</p>
+                <p class="note">Models were selected by cross-validation, never by test score. Three seeds don't support claiming one strategy is best in general.</p>
+              </div>
+            </details>
+            <div class="plinks">
+              <a class="btn ghost sm" href="https://github.com/SingerXing/machine-learning-projects-in-stealth/tree/main/revised/task-2210">Benchmark ↗</a>
+              <a class="btn ghost sm" href="https://github.com/SingerXing/machine-learning-projects-in-stealth/tree/main/feedback">Mentor feedback ↗</a>
+              <a class="btn ghost sm" href="https://github.com/SingerXing/machine-learning-projects-in-stealth">Repository ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3 KnowYi -->
+        <article class="proj">
+          <div class="media">
+            <div class="code" aria-label="Pseudocode of the decision loop"><b>while</b> budget &gt; 0:
+    belief = <em>bayes_update</em>(belief, evidence)
+    options = feasible(inspections, prerequisites)
+    best = <em>argmax</em>(two_step_lookahead(o) - cost(o, shared_setup)
+                for o in options)
+    <b>if</b> value(best) &lt;= value(stop): <b>return</b> decide(belief)
+    evidence += request(best)</div>
+            <div class="dec" style="margin-top:14px">
+              <div class="bar-row"><span>No acquisition</span><div class="track"><div class="fill" style="width:100%;background:var(--s-grid)"></div></div><span class="v">100</span></div>
+              <div class="bar-row"><span>Planner</span><div class="track"><div class="fill" style="width:85.4%;background:var(--accent)"></div></div><span class="v">85.4</span></div>
+              <p style="font-size:.74rem;color:var(--ink-2)">Mean modeled loss across 8 synthetic scenarios, indexed to no acquisition = 100.</p>
+            </div>
+          </div>
+          <div class="body">
+            <div class="meta"><span class="org">KnowYi · ML Engineer projects</span><span class="when">Sep 2026 – present</span></div>
+            <h3>Choosing which evidence to buy, and when to stop</h3>
+            <p class="sum">A Python decision-planning system that picks the next inspection under budget and prerequisite constraints, using Bayesian updates, two-step lookahead, and shared setup-cost accounting.</p>
+            <div class="kpis">
+              <div><b>14.6%</b><span>lower mean modeled loss than no acquisition</span></div>
+              <div><b>45</b><span>scenarios in the expanded evaluation</span></div>
+              <div><b>197</b><span>automated tests</span></div>
+            </div>
+            <div class="tags"><span>Python</span><span>Bayesian inference</span><span>Experimental design</span><span>unittest</span></div>
+            <p class="note">Five strategies benchmarked on reproducible synthetic scenarios. The code is private; I'm happy to walk through it.</p>
+          </div>
+        </article>
+      </div>
+
+      <h3 style="font-size:1.35rem;margin-top:48px">More work</h3>
+      <div class="more-grid">
+        <a class="mini" href="https://github.com/SingerXing/data-science-programming-ii-projects/tree/main/projects/mp5"><h4>Data website with A/B testing</h4><p>Flask app serving JSON data and SVG plots, with email validation and an A/B-tested donation page.</p><span class="when">Flask · Spring 2026</span></a>
+        <a class="mini" href="https://github.com/SingerXing/machine-learning-projects-in-stealth/tree/main/revised"><h4>Breast-cancer classifier, revised</h4><p>Leak-free CV pipeline and nested CV. Accuracy 96.5% → 98.3%; missed malignant cases 3 → 2.</p><span class="when">scikit-learn · 2026</span></a>
+        <a class="mini" href="https://github.com/SingerXing/data-science-programming-ii-projects/tree/main/projects/mp4"><h4>Graph crawlers</h4><p>BFS and DFS crawlers over files and live web pages with Selenium browser automation.</p><span class="when">Selenium · Spring 2026</span></a>
+        <a class="mini" href="https://github.com/SingerXing/data-science-programming-ii-projects/tree/main/projects/mp8"><h4>Laptop purchase prediction</h4><p>Feature engineering from user logs to predict who buys, with a classification model.</p><span class="when">scikit-learn · Spring 2026</span></a>
+        <a class="mini" href="https://github.com/SingerXing/data-science-programming-ii-projects/tree/main/projects/mp7"><h4>Geospatial regression</h4><p>Regression models on census tracts with GeoPandas and spatial data.</p><span class="when">GeoPandas · Spring 2026</span></a>
+        <a class="mini" href="https://github.com/SingerXing/data-science-programming-ii-projects"><h4>All coursework projects</h4><p>Eight Python projects: scraping, Git analysis, BSTs, EDGAR logs, regression and more.</p><span class="when">GitHub →</span></a>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="sec-head"><div><span class="eyebrow">Experience</span><h2>Where I've worked</h2></div></div>
+      <div class="timeline">
+        <div class="job">
+          <div><span class="when">Sep 2026 – present</span></div>
+          <div><h3>KnowYi</h3><p class="role">Machine learning engineer projects</p>
+            <ul><li>Built a Bayesian decision-planning system for choosing inspections under budget and prerequisite constraints.</li><li>Benchmarked five strategies across 8, then 45, synthetic scenarios; verified with 197 automated tests.</li></ul></div>
+        </div>
+        <div class="job">
+          <div><span class="when">Aug – Sep 2026</span></div>
+          <div><h3>STEALTH Ventures</h3><p class="role">Quantitative Analysis Volunteer · Remote</p>
+            <ul><li>Built an NLP classification pipeline and a fair benchmark of grid, random and Bayesian tuning (288 trials).</li><li>Fine-tuned a transformer on startup and investment text, with a baseline-vs-fine-tuned comparison.</li></ul></div>
+        </div>
+        <div class="job">
+          <div><span class="when">Feb – May 2026</span></div>
+          <div><h3>UW–Madison MXM</h3><p class="role">Undergraduate researcher · Mathematics Experience &amp; Research</p>
+            <ul><li>Co-developed an autoencoder–LSTM model for stochastic Lorenz–96 and FitzHugh–Nagumo dynamics.</li><li>Designed extensions using statistical observations; presented a final report and research poster.</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="about">
+        <div class="text">
+          <span class="eyebrow">About</span>
+          <h2 style="font-size:clamp(2rem,4vw,2.9rem);font-weight:750;margin:8px 0 22px">Math first, then the data.</h2>
+          <p>I love <b>the rigorous logic behind mathematics</b>, and how equations become the foundations for real discoveries and technologies. Data science is where I put that to work: taking complicated data and asking how far a model can explain what we see and anticipate what comes next.</p>
+          <p>I'm also curious about <b>finance</b>: how public policy and consumer behavior shape financial decisions, and how credit affects people and businesses.</p>
+          <p>Off the screen I like yachting, basketball, skiing and handcrafting, and I'm always adding to a list of certifications I want to earn next.</p>
+          <div class="edu">
+            <span class="when">B.A. expected May 2027</span>
+            <h3 style="margin-top:4px">University of Wisconsin–Madison</h3>
+            <p style="color:var(--ink-2);margin-top:2px">Data Science &amp; Mathematics · GPA 4.0 / 4.0</p>
+            <ul><li>R. Creighton Buck Prize, Department of Mathematics</li><li>Dean's List: Spring 2025, Fall 2025, Spring 2026</li><li>Study Abroad Scholars; Undergraduate Scholarship for Summer Study</li></ul>
+          </div>
+        </div>
+        <div class="skills">
+          <span class="eyebrow">Skills</span>
+          <div class="skill"><h4>Machine learning</h4><div class="pills"><span>PyTorch</span><span>scikit-learn</span><span>Autoencoders</span><span>LSTMs</span><span>Transformers</span><span>NLP</span></div></div>
+          <div class="skill"><h4>Optimization &amp; evaluation</h4><div class="pills"><span>Ray Tune</span><span>HyperOpt</span><span>Nested CV</span><span>A/B testing</span><span>Sensitivity analysis</span></div></div>
+          <div class="skill"><h4>Languages &amp; data</h4><div class="pills"><span>Python</span><span>R</span><span>SQL</span><span>pandas</span><span>NumPy</span><span>Excel</span></div></div>
+          <div class="skill"><h4>Visualization &amp; web</h4><div class="pills"><span>Matplotlib</span><span>Dashboards</span><span>Flask</span><span>Selenium</span><span>Web scraping</span></div></div>
+          <div class="skill"><h4>Mathematics</h4><div class="pills"><span>Real analysis</span><span>ODEs &amp; PDEs</span><span>Stochastic processes</span><span>Numerical analysis</span><span>Linear optimization</span><span>Time series</span><span>Topology</span></div></div>
+          <div class="skill"><h4>Tools</h4><div class="pills"><span>Git</span><span>Jupyter</span><span>unittest</span><span>Reproducible environments</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" style="padding-top:0">
+      <div class="contact">
+        <div>
+          <span class="eyebrow" style="color:inherit;opacity:.7">Contact</span>
+          <h2 style="margin-top:10px">Let's work together.</h2>
+          <p>I'm looking for data science, machine learning and quantitative research internships. The fastest way to reach me is LinkedIn.</p>
+        </div>
+        <div class="clinks">
+          <a href="https://www.linkedin.com/in/singer-xing-08390935b/">LinkedIn <span aria-hidden="true">↗</span></a>
+          <a href="https://github.com/SingerXing">GitHub <span aria-hidden="true">↗</span></a>
+          <a href="https://github.com/SingerXing/resume-and-cv-public/blob/main/resume/Singer-Xing-Resume-redacted.pdf">Résumé <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Singer Xing</span>
+  <span><i>I think, therefore I am.</i></span>
+</footer>
+
+<script>
+(function(){
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let C={};
+  function rgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16);return[n>>16&255,n>>8&255,n&255]}
+  function readColors(){C={cool:rgb(css('--accent')),warm:rgb(css('--warm')),mid:rgb(css('--surface')),grid:css('--s-grid'),rand:css('--s-rand'),bayes:css('--s-bayes'),line:css('--line')};}
+  readColors();
+  function themeChanged(){readColors();drawChart();repaintAll();}
+  new MutationObserver(themeChanged).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  if(window.matchMedia){const mq=matchMedia('(prefers-color-scheme: dark)');mq.addEventListener&&mq.addEventListener('change',themeChanged);}
+
+  /* Lorenz–96 */
+  const N=40,dt=0.005,COLS=300,SPC=6;let F=8,sigma=0.5,t=0,running=!reduce;
+  const x=new Float64Array(N).fill(F);x[19]+=0.01;const hist=[];
+  const off=document.createElement('canvas');off.width=COLS;off.height=N;const octx=off.getContext('2d');const img=octx.createImageData(COLS,N);
+  const canvas=document.getElementById('field'),ctx=canvas.getContext('2d');
+  function g(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+  function step(){const d=new Float64Array(N),sq=Math.sqrt(dt);
+    for(let i=0;i<N;i++){d[i]=(x[(i+1)%N]-x[(i-2+N)%N])*x[(i-1+N)%N]-x[i]+F;}
+    for(let i=0;i<N;i++){x[i]+=d[i]*dt+sigma*sq*g();if(!isFinite(x[i]))x[i]=F;}t+=dt;}
+  function col(v){let s=(v+6)/18;s=s<0?0:s>1?1:s;const p=1/3;let a,b,u;if(s<p){a=C.cool;b=C.mid;u=s/p}else{a=C.mid;b=C.warm;u=(s-p)/(1-p)}return[a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u]}
+  function push(){for(let k=0;k<SPC;k++)step();hist.push(Float32Array.from(x));if(hist.length>COLS)hist.shift();}
+  function repaintAll(){const o0=COLS-hist.length;for(let c=0;c<COLS;c++){const h=hist[c-o0];for(let i=0;i<N;i++){const o=(i*COLS+c)*4,r=h?col(h[i]):C.mid;img.data[o]=r[0];img.data[o+1]=r[1];img.data[o+2]=r[2];img.data[o+3]=255;}}octx.putImageData(img,0,0);blit();}
+  function size(){const r=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.max(1,Math.round(r.width*dpr));canvas.height=Math.max(1,Math.round(r.height*dpr));blit();}
+  function blit(){ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(off,0,0,canvas.width,canvas.height);document.getElementById('readout').textContent=(running?'live':'paused')+' · t = '+t.toFixed(1);}
+  for(let k=0;k<400;k++)step();for(let c=0;c<COLS;c++)push();size();repaintAll();
+  new ResizeObserver(size).observe(canvas);
+  let last=0;function loop(ts){if(running&&ts-last>33){last=ts;push();push();repaintAll();}requestAnimationFrame(loop);}requestAnimationFrame(loop);
+  const play=document.getElementById('play');function sp(){play.textContent=running?'Pause':'Play';play.setAttribute('aria-pressed',String(!running));blit();}sp();
+  play.addEventListener('click',()=>{running=!running;sp();});
+  document.getElementById('kick').addEventListener('click',()=>{x[19]+=8;if(!running){push();repaintAll();}});
+  const fI=document.getElementById('forcing'),nI=document.getElementById('noise');
+  fI.addEventListener('input',()=>{F=+fI.value;document.getElementById('forcingOut').textContent=F.toFixed(1);});
+  nI.addEventListener('input',()=>{sigma=+nI.value;document.getElementById('noiseOut').textContent=sigma.toFixed(1);});
+
+  /* tuning chart */
+  const T={"Grid|42":[0.7154,0.7532,0.7622,0.7499,0.7158,0.7511,0.7548,0.737,0.7209,0.7455,0.7647,0.7677,0.7144,0.7431,0.758,0.7535,0.7319,0.7604,0.7662,0.7533,0.7309,0.7557,0.7601,0.7379,0.7342,0.7512,0.7717,0.7704,0.7259,0.7471,0.7591,0.757],"Random|42":[0.7653,0.7626,0.7574,0.7207,0.7595,0.7514,0.7457,0.7597,0.7657,0.7582,0.7377,0.7385,0.7476,0.7605,0.7484,0.7457,0.7665,0.7454,0.7723,0.7518,0.7431,0.7717,0.7731,0.733,0.7725,0.7583,0.7683,0.7208,0.7518,0.7298,0.7429,0.7639],"Bayesian|42":[0.7498,0.7563,0.7204,0.7224,0.7535,0.7568,0.755,0.7542,0.7532,0.754,0.7161,0.7404,0.7695,0.7739,0.7704,0.7598,0.7555,0.7704,0.7723,0.7723,0.7739,0.7708,0.7739,0.7678,0.7571,0.7615,0.7601,0.7505,0.7637,0.7738,0.7644,0.7686],"Random|43":[0.7661,0.7581,0.729,0.7561,0.7405,0.7419,0.7314,0.7723,0.7634,0.7574,0.7374,0.7326,0.7425,0.7701,0.7398,0.7414,0.7701,0.729,0.7241,0.7425,0.76,0.7224,0.7581,0.7586,0.7537,0.7175,0.7623,0.7509,0.7314,0.7734,0.761,0.7634],"Bayesian|43":[0.7431,0.7467,0.7501,0.7443,0.7481,0.7383,0.7441,0.7549,0.7311,0.7627,0.7507,0.7655,0.735,0.7554,0.7655,0.764,0.7325,0.763,0.7668,0.764,0.7635,0.7583,0.7676,0.7667,0.7524,0.7575,0.7644,0.7595,0.7434,0.755,0.735,0.73],"Grid|43":[0.7154,0.7532,0.7622,0.7499,0.7158,0.7511,0.7548,0.737,0.7209,0.7455,0.7647,0.7677,0.7144,0.7431,0.758,0.7535,0.7319,0.7604,0.7662,0.7533,0.7309,0.7557,0.7601,0.7379,0.7342,0.7512,0.7717,0.7704,0.7259,0.7471,0.7591,0.757],"Bayesian|44":[0.7203,0.7405,0.757,0.7626,0.7322,0.7575,0.7673,0.7627,0.7663,0.7532,0.7554,0.7757,0.757,0.7479,0.7682,0.773,0.7432,0.7753,0.7712,0.7743,0.7686,0.7731,0.7572,0.7717,0.7728,0.7614,0.7727,0.7617,0.7634,0.7645,0.745,0.7578],"Grid|44":[0.7154,0.7532,0.7622,0.7499,0.7158,0.7511,0.7548,0.737,0.7209,0.7455,0.7647,0.7677,0.7144,0.7431,0.758,0.7535,0.7319,0.7604,0.7662,0.7533,0.7309,0.7557,0.7601,0.7379,0.7342,0.7512,0.7717,0.7704,0.7259,0.7471,0.7591,0.757],"Random|44":[0.7402,0.7387,0.755,0.7606,0.7519,0.7582,0.7161,0.7546,0.7334,0.7604,0.7429,0.7649,0.7472,0.7506,0.7448,0.7546,0.7717,0.7694,0.7422,0.7551,0.7645,0.7488,0.7584,0.7385,0.7543,0.7645,0.7394,0.7634,0.7269,0.7646,0.723,0.773]};
+  let seed='42';const svg=document.getElementById('chart'),NS='http://www.w3.org/2000/svg';
+  const W=520,H=260,L=46,R=12,TP=10,B=34,y0=0.71,y1=0.78;
+  const sx=i=>L+(i-1)/31*(W-L-R),sy=v=>TP+(1-(v-y0)/(y1-y0))*(H-TP-B);
+  function el(n,a){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e}
+  function drawChart(){while(svg.firstChild)svg.removeChild(svg.firstChild);
+    for(let v=0.71;v<=0.7801;v+=0.01){const y=sy(v);el('line',{x1:L,x2:W-R,y1:y,y2:y,stroke:C.line,'stroke-width':1});el('text',{x:L-7,y:y+4,'text-anchor':'end'}).textContent=v.toFixed(2);}
+    [1,8,16,24,32].forEach(i=>{el('text',{x:sx(i),y:H-B+17,'text-anchor':'middle'}).textContent=i;});
+    el('text',{x:(L+W-R)/2,y:H-3,'text-anchor':'middle'}).textContent='trial';
+    const cols={Grid:C.grid,Random:C.rand,Bayesian:C.bayes};
+    ['Grid','Random','Bayesian'].forEach(s=>{const a=T[s+'|'+seed];let best=-1;const pts=[];
+      a.forEach((v,i)=>{el('circle',{cx:sx(i+1),cy:sy(v),r:2.4,fill:cols[s],'fill-opacity':0.35});best=Math.max(best,v);pts.push([sx(i+1),sy(best)]);});
+      let d='M'+pts[0][0].toFixed(1)+','+pts[0][1].toFixed(1);for(let i=1;i<pts.length;i++){d+=' L'+pts[i][0].toFixed(1)+','+pts[i-1][1].toFixed(1)+' L'+pts[i][0].toFixed(1)+','+pts[i][1].toFixed(1);}
+      el('path',{d,fill:'none',stroke:cols[s],'stroke-width':2.25,'stroke-linejoin':'round'});
+      const lp=pts[pts.length-1];el('circle',{cx:lp[0],cy:lp[1],r:4,fill:cols[s]});});}
+  drawChart();
+  document.querySelectorAll('[data-seed]').forEach(b=>b.addEventListener('click',()=>{seed=b.dataset.seed;document.querySelectorAll('[data-seed]').forEach(o=>o.setAttribute('aria-pressed',String(o===b)));drawChart();}));
+})();
+</script>
+
+</body>
+</html>
